@@ -1,26 +1,30 @@
 #include <iostream>
-#include <vector>
+#include <map>
+
+int norm(int x, int K) {
+	x %= K;
+	return std::min(x, K - x);
+}
 
 bool solve() {
 	int N, K;
 	std::cin >> N >> K;
 
-	std::vector<bool> map(2e9);
+	std::map<int, int> freq;
 
 	for (int i = 0; i < N; ++i) {
 		int S;
 		std::cin >> S;
-
-		map[S] = true;
-		map[S + K] = true;
-		map[std::abs(S - K)] = true;
+		freq[norm(S, K)]++;
 	}
-
 	for (int i = 0; i < N; ++i) {
 		int T;
 		std::cin >> T;
+		freq[norm(T, K)]--;
+	}
 
-		if (!map[T]) {
+	for (const auto &pair : freq) {
+		if (pair.second != 0) {
 			return false;
 		}
 	}
